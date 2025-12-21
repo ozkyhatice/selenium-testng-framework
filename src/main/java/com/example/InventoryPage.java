@@ -26,12 +26,13 @@ public class InventoryPage {
             .getText();
     }
     public void clickAddToCart() {
+        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
         driver.findElement(addToCartButton)
             .click();
     }
     public String getCartBadgeCount(WebDriverWait wait) {
-        
-        wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
+        wait.until(ExpectedConditions.presenceOfElementLocated(shoppingCartBadge));
         return driver.findElement(shoppingCartBadge)
             .getText();
     }
