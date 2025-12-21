@@ -40,4 +40,14 @@ public class InventoryTest {
         String badgeCount = inventoryPage.getCartBadgeCount(wait);
         Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
     }
+    @Test
+    public void addTwoBackpacksToCart() {
+        inventoryPage.clickBackpack();
+        inventoryPage.clickAddToCart();
+        driver.navigate().back();
+        inventoryPage.clickBackpack();
+        inventoryPage.clickAddToCart();
+        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        Assert.assertEquals(badgeCount, "2", "Cart badge count should be 2 after adding two items.");
+    }
 }
