@@ -29,7 +29,9 @@ public class InventoryTest {
         options.addArguments("--disable-dev-shm-usage"); 
 
         driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20)); // Increased from 10 to 20
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPagePom(driver);
         inventoryPage = new InventoryPage(driver);

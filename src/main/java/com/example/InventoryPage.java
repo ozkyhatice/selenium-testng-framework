@@ -30,9 +30,16 @@ public class InventoryPage {
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
         driver.findElement(addToCartButton)
             .click();
+
+            try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     public String getCartBadgeCount(WebDriverWait wait) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(shoppingCartBadge));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
         return driver.findElement(shoppingCartBadge)
             .getText();
     }
