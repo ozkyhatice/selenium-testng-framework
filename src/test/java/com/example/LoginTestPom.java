@@ -22,11 +22,11 @@ public class LoginTestPom {
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");        // GUI olmadan çalıştır
-        options.addArguments("--disable-gpu");     // GPU hatalarını önler
-        options.addArguments("--window-size=1920,1080"); // Sayfa boyutu
-        options.addArguments("--no-sandbox");      // Linux CI için gerekli
-        options.addArguments("--disable-dev-shm-usage"); // Linux memory hatalarını önler
+        options.addArguments("--headless");        
+        options.addArguments("--disable-gpu");     
+        options.addArguments("--window-size=1920,1080"); 
+        options.addArguments("--no-sandbox");     
+        options.addArguments("--disable-dev-shm-usage"); 
 
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));

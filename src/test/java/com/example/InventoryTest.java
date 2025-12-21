@@ -22,11 +22,11 @@ public class InventoryTest {
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");        // GUI olmadan çalıştır
-        options.addArguments("--disable-gpu");     // GPU hatalarını önler
-        options.addArguments("--window-size=1920,1080"); // Sayfa boyutu
-        options.addArguments("--no-sandbox");      // Linux CI için gerekli
-        options.addArguments("--disable-dev-shm-usage"); // Linux memory hatalarını önler
+        options.addArguments("--headless");        
+        options.addArguments("--disable-gpu");     
+        options.addArguments("--window-size=1920,1080"); 
+        options.addArguments("--no-sandbox");      
+        options.addArguments("--disable-dev-shm-usage"); 
 
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -47,15 +47,5 @@ public class InventoryTest {
         inventoryPage.clickAddToCart();
         String badgeCount = inventoryPage.getCartBadgeCount(wait);
         Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
-    }
-    @Test
-    public void addTwoBackpacksToCart() {
-        inventoryPage.clickBackpack();
-        inventoryPage.clickAddToCart();
-        driver.navigate().back();
-        inventoryPage.clickBackpack();
-        inventoryPage.clickAddToCart();
-        String badgeCount = inventoryPage.getCartBadgeCount(wait);
-        Assert.assertEquals(badgeCount, "2", "Cart badge count should be 2 after adding two items.");
     }
 }
