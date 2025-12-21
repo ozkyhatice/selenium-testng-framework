@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="InventoryTestSuite">
+    <test name="InventoryTests">
+        <classes>
+            <class name="com.example.InventoryTest"/>
+            <class name="com.example.LoginTestPom"/>
+            <class name="com.example.LoginTest"/>
+
+        </classes>
+    </test>
+</suite>
