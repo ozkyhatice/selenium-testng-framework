@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -11,6 +12,7 @@ import org.testng.annotations.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class LoginTestPom {
     WebDriver driver;
@@ -19,7 +21,14 @@ public class LoginTestPom {
 
     @BeforeMethod
     public void setUp() {
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");        // GUI olmadan çalıştır
+        options.addArguments("--disable-gpu");     // GPU hatalarını önler
+        options.addArguments("--window-size=1920,1080"); // Sayfa boyutu
+        options.addArguments("--no-sandbox");      // Linux CI için gerekli
+        options.addArguments("--disable-dev-shm-usage"); // Linux memory hatalarını önler
+
+        driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPagePom(driver);

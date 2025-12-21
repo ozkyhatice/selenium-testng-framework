@@ -4,7 +4,6 @@
         <classes>
             <class name="com.example.InventoryTest"/>
             <class name="com.example.LoginTestPom"/>
-            <class name="com.example.LoginTest"/>
 
         </classes>
     </test>
