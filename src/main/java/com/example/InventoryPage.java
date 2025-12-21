@@ -18,10 +18,14 @@ public class InventoryPage {
     }
     //ACTIONS
     public void clickBackpack() {
+        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.elementToBeClickable(backPackItem));
         driver.findElement(backPackItem)
             .click();
     }
     public String getBackpackPrice() {
+        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(priceItem));
         return driver.findElement(priceItem)
             .getText();
     }
