@@ -46,7 +46,6 @@ public class InventoryTest {
         Assert.assertEquals(price, "$29.99", "Backpack price does not match.");
         
         inventoryPage.clickAddToCart();
-
         String badgeCount = inventoryPage.getCartBadgeCount(wait);
         Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
     }

@@ -10,7 +10,7 @@ public class InventoryPage {
     private By backPackItem = By.id("item_4_img_link");
     private By priceItem = By.className("inventory_details_price");
     private By addToCartButton = By.id("add-to-cart");
-    private By shoppingCartBadge = By.className("shopping_cart_badge");
+    private By shoppingCartBadge = By.cssSelector(".shopping_cart_badge");
 
     //CONSTRUCTOR
     public InventoryPage(WebDriver driver) {
