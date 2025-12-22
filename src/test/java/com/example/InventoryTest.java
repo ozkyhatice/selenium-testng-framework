@@ -49,17 +49,17 @@ public class InventoryTest {
         };
     }
 
-    // @Test(dataProvider = "userData")
-    // public void addBackpackToCart(String username, String password, String expectedPrice) {
-    //     loginPage.login(username, password);
-    //     inventoryPage.clickBackpack();
-    //     String price = inventoryPage.getBackpackPrice();
-    //     Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
+    @Test(dataProvider = "userData")
+    public void addBackpackToCart(String username, String password, String expectedPrice) {
+        loginPage.login(username, password);
+        inventoryPage.clickBackpack();
+        String price = inventoryPage.getBackpackPrice();
+        Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
         
-    //     inventoryPage.clickAddToCart();
-    //     String badgeCount = inventoryPage.getCartBadgeCount(wait);
-    //     Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
-    // }
+        inventoryPage.clickAddToCart();
+        // String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        // Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
+    }
 
     @DataProvider(name = "problemUserData")
     public Object[][] problemUserData() {
