@@ -18,8 +18,23 @@ public class InventoryPage {
     private By addToCartButton = By.id("add-to-cart");
     private By shoppingCartBadge = By.className("shopping_cart_badge");
 
+    private By inventoryContainer = By.id("inventory_container");
+    // private By inventoryList = By.className("inventory_list");
+    private By inventoryItem = By.className("inventory_item");
+    private By shoppingCart = By.className("shopping_cart_link");
+
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public boolean isInventoryPageDisplayed() {
+        return driver.findElement(inventoryContainer).isDisplayed();
+    }
+    public int getInventoryItemCount() {
+        return driver.findElements(inventoryItem).size();
+    }
+    public boolean isCartIconDisplayed() {
+        return driver.findElement(shoppingCart).isDisplayed();
     }
 
     public void clickBackpack() {

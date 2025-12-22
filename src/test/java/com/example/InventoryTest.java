@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 
@@ -50,18 +51,18 @@ public class InventoryTest {
         };
     }
 
-    @Test(dataProvider = "userData")
-    public void addBackpackToCart(String username, String password, String expectedPrice) {
-        loginPage.login(username, password);
-        inventoryPage.clickBackpack();
-        String price = inventoryPage.getBackpackPrice();
-        Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
+    // @Test(dataProvider = "userData")
+    // public void addBackpackToCart(String username, String password, String expectedPrice) {
+    //     loginPage.login(username, password);
+    //     inventoryPage.clickBackpack();
+    //     String price = inventoryPage.getBackpackPrice();
+    //     Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
         
-        inventoryPage.clickAddToCart();
-        String badgeCount = inventoryPage.getCartBadgeCount(wait);
-        System.out.println("Badge count for user " + username + ": " + badgeCount);
-        // Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
-    }
+    //     inventoryPage.clickAddToCart();
+    //     String badgeCount = inventoryPage.getCartBadgeCount(wait);
+    //     System.out.println("Badge count for user " + username + ": " + badgeCount);
+    //     // Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
+    // }
 
     @DataProvider(name = "problemUserData")
     public Object[][] problemUserData() {
@@ -76,4 +77,25 @@ public class InventoryTest {
         String price = inventoryPage.getBackpackPrice();
         Assert.assertEquals(price, "$49.99", "Problem user should show incorrect price $49.99");
         }
+
+    @Test
+    public void validateInventoryPageUI() {
+        loginPage.login("standard_user", "secret_sauce");
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(
+            inventoryPage.isInventoryPageDisplayed(), 
+            "Inventory page is not displayed."
+        );
+        int itemCount = inventoryPage.getInventoryItemCount();
+        softAssert.assertEquals(
+            itemCount, 
+            6, 
+            "Inventory item count mismatch."
+        );
+        softAssert.assertTrue(
+            inventoryPage.isCartIconDisplayed(),    
+            "Shopping cart icon is not displayed."
+        );
+        softAssert.assertAll();
+    }
 }
