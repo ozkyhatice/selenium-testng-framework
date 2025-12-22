@@ -14,7 +14,6 @@ import org.testng.asserts.SoftAssert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.Console;
 import java.time.Duration;
 import org.testng.annotations.DataProvider;
 
@@ -93,5 +92,28 @@ public class LoginTestPom {
         }
         softAssert.assertAll();
         System.out.println("Login test completed for user: " + username);
+    }
+    @Test(
+        dataProvider = "loginData",
+        groups = "smoke"
+    )
+    public void loginWithSmoke(
+            String username, 
+            String password, 
+            boolean isSuccessExpected) {
+
+        if (!isSuccessExpected) {
+            return; 
+        }
+        loginPage.login(username, password);
+        SoftAssert softAssert = new SoftAssert();
+
+        
+        softAssert.assertTrue(
+            inventoryPage.isInventoryPageDisplayed(),
+            "Inventory page should be displayed for user: " + username
+        );
+        
+        softAssert.assertAll();
     }
 }
