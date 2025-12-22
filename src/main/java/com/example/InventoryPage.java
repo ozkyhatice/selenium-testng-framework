@@ -1,6 +1,7 @@
 package com.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 public class InventoryPage {
@@ -34,16 +35,27 @@ public class InventoryPage {
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
         driver.findElement(addToCartButton).click();
         
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        wait.until(driver -> js.executeScript("return document.readyState").equals("complete"));
+        
         try {
-            Thread.sleep(1000); 
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
     public String getCartBadgeCount(WebDriverWait wait) {
         WebDriverWait extendedWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(30));
+        
         extendedWait.until(ExpectedConditions.presenceOfElementLocated(shoppingCartBadge));
+        
         extendedWait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
+        
+        extendedWait.until(driver -> {
+            String text = driver.findElement(shoppingCartBadge).getText();
+            return text != null && !text.isEmpty();
+        });
+        
         return driver.findElement(shoppingCartBadge).getText();
     }
 }
