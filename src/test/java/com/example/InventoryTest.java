@@ -17,26 +17,20 @@ public class InventoryTest {
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");   // Use new headless mode
+        options.addArguments("--headless=new"); 
         options.addArguments("--disable-gpu");     
         options.addArguments("--window-size=1920,1080"); 
         options.addArguments("--no-sandbox");      
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-software-rasterizer");
-        options.addArguments("--remote-allow-origins=*");
-        
-        // Additional options for CI stability
-        options.addArguments("--disable-blink-features=AutomationControlled");
-        options.addArguments("--disable-infobars");
-        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-        options.setExperimentalOption("useAutomationExtension", false);
+        options.addArguments("--proxy-server='direct://'");
+        options.addArguments("--proxy-bypass-list=*");
+        options.addArguments("--blink-settings=imagesEnabled=false"); // Hız için resimleri devre dışı bırakabilir
 
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(60));
-        driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(30));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30)); // Increased to 30 for CI
+        driver.manage().window().maximize();
+        
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(30)); 
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPagePom(driver);
         inventoryPage = new InventoryPage(driver);
