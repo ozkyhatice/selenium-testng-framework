@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.Console;
 import java.time.Duration;
 
 public class InventoryTest {
@@ -57,7 +59,8 @@ public class InventoryTest {
         Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
         
         inventoryPage.clickAddToCart();
-        // String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        System.out.println("Badge count for user " + username + ": " + badgeCount);
         // Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
     }
 
