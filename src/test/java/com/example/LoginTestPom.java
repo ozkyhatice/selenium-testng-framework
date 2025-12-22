@@ -12,7 +12,6 @@ import org.testng.annotations.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 public class LoginTestPom {
     WebDriver driver;

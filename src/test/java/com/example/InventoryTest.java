@@ -1,17 +1,12 @@
 package com.example;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 public class InventoryTest {
     WebDriver driver;
@@ -35,20 +30,44 @@ public class InventoryTest {
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPagePom(driver);
         inventoryPage = new InventoryPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
     }
     @AfterMethod
     public void tearDown() {
         driver.quit();
     }
-    @Test
-    public void addBackpackToCart() {
+
+    @DataProvider(name = "userData")
+    public Object[][] userData() {
+        return new Object[][] {
+            {"standard_user", "secret_sauce", "$29.99"},
+            // problem_user is intentionally buggy and cart functionality doesn't work properly
+            // {"problem_user", "secret_sauce", "$49.99"}, 
+        };
+    }
+
+    @Test(dataProvider = "userData")
+    public void addBackpackToCart(String username, String password, String expectedPrice) {
+        loginPage.login(username, password);
         inventoryPage.clickBackpack();
         String price = inventoryPage.getBackpackPrice();
-        Assert.assertEquals(price, "$29.99", "Backpack price does not match.");
+        Assert.assertEquals(price, expectedPrice, "Backpack price does not match for user: " + username);
         
-        // inventoryPage.clickAddToCart();
-        // String badgeCount = inventoryPage.getCartBadgeCount(wait);
-        // Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
+        inventoryPage.clickAddToCart();
+        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        Assert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
     }
+
+    @DataProvider(name = "problemUserData")
+    public Object[][] problemUserData() {
+        return new Object[][] {
+            {"problem_user", "secret_sauce", "$49.99"},
+        };
+    }
+    @Test
+    public void verifyProblemUserPriceIssue() {
+        loginPage.login("problem_user", "secret_sauce");
+        inventoryPage.clickBackpack();
+        String price = inventoryPage.getBackpackPrice();
+        Assert.assertEquals(price, "$49.99", "Problem user should show incorrect price $49.99");
+        }
 }
