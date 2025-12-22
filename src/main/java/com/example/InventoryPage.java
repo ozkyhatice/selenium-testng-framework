@@ -32,19 +32,18 @@ public class InventoryPage {
     public void clickAddToCart() {
         WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
-        driver.findElement(addToCartButton)
-            .click();
-
-            try {
-            Thread.sleep(500);
+        driver.findElement(addToCartButton).click();
+        
+        try {
+            Thread.sleep(1000); 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
     public String getCartBadgeCount(WebDriverWait wait) {
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
-        return driver.findElement(shoppingCartBadge)
-            .getText();
+        WebDriverWait extendedWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(30));
+        extendedWait.until(ExpectedConditions.presenceOfElementLocated(shoppingCartBadge));
+        extendedWait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
+        return driver.findElement(shoppingCartBadge).getText();
     }
 }
