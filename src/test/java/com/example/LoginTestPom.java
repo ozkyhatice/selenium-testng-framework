@@ -1,5 +1,6 @@
 package com.example;
 
+import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,14 +10,19 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.Console;
 import java.time.Duration;
+import org.testng.annotations.DataProvider;
 
 public class LoginTestPom {
     WebDriver driver;
     WebDriverWait wait;
     LoginPagePom loginPage;
+    InventoryPage inventoryPage;
 
     @BeforeMethod
     public void setUp() {
@@ -31,7 +37,7 @@ public class LoginTestPom {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPagePom(driver);
-    }
+        inventoryPage = new InventoryPage(driver);}
     @AfterMethod
     public void tearDown() {
         driver.quit();
@@ -56,5 +62,36 @@ public class LoginTestPom {
                 loginPage.isErrorDisplayed(),
                 "Error message should be displayed"
         );
+    }
+    //Login with DataProvider
+    @DataProvider(name = "loginData")
+    public Object[][] loginData() {
+        return new Object[][] {
+            {"standard_user", "secret_sauce", true},
+            {"locked_out_user", "secret_sauce", false},
+            {"problem_user", "secret_sauce", true},
+            {"performance_glitch_user", "secret_sauce", true},
+            {"standard_user", "wrong_password", false}  
+
+        };
+    }
+    @Test(dataProvider = "loginData")
+    public void loginWithDataProvider(String username, String password, boolean isSuccessExpected) {
+        loginPage.login(username, password);
+        SoftAssert softAssert = new SoftAssert();
+
+        if (isSuccessExpected) {
+            softAssert.assertTrue(
+                inventoryPage.isInventoryPageDisplayed(),
+                "Inventory page should be displayed for user: " + username
+            );
+        } else {
+            softAssert.assertTrue(
+                loginPage.isErrorDisplayed(),
+                "Error message should be displayed for user: " + username
+            );
+        }
+        softAssert.assertAll();
+        System.out.println("Login test completed for user: " + username);
     }
 }

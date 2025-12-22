@@ -98,4 +98,5 @@ public class InventoryTest {
         );
         softAssert.assertAll();
     }
+
 }
