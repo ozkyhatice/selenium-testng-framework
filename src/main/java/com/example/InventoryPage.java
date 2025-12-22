@@ -44,6 +44,8 @@ public class InventoryPage {
     public String getCartBadgeCount(WebDriverWait wait) {
         WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
         wait.until(driver -> !badge.getText().trim().isEmpty());
-        return badge.getText();
+        String badgeText = badge.getText().trim();
+        System.out.println("DEBUG: Badge text retrieved: '" + badgeText + "' (length: " + badgeText.length() + ")");
+        return badgeText;
     }
 }
