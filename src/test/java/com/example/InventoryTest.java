@@ -7,7 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.Console;
 import java.time.Duration;
 
 public class InventoryTest {
