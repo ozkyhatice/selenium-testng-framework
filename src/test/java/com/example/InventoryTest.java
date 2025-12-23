@@ -190,10 +190,16 @@ public class InventoryTest {
             
             wait.until(ExpectedConditions.elementToBeClickable(By.id(itemId))).click();
             
-
             inventoryPage.clickAddToCart();
-            driver.navigate().back();
             
+            // Wait a moment for cart to update
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            
+            driver.navigate().back();
             wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
 
             itemCount++;
