@@ -1,6 +1,5 @@
 package com.example;
 
-import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -74,7 +73,7 @@ public class LoginTestPom {
 
         };
     }
-    @Test(dataProvider = "loginData")
+    @Test(retryAnalyzer = Retry.class, dataProvider = "loginData")
     public void loginWithDataProvider(String username, String password, boolean isSuccessExpected) {
         loginPage.login(username, password);
         SoftAssert softAssert = new SoftAssert();
@@ -116,4 +115,5 @@ public class LoginTestPom {
         
         softAssert.assertAll();
     }
+    
 }

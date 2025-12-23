@@ -50,6 +50,15 @@ public class InventoryTest {
             // {"problem_user", "secret_sauce", "$49.99"}, 
         };
     }
+    @Test(retryAnalyzer = Retry.class)
+    public void addBackpackToCart() {
+        loginPage.login("standard_user", "secret_sauce");
+        inventoryPage.clickBackpack();
+        String price = inventoryPage.getBackpackPrice();
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(price, "$29.99", "Backpack price does not match.");
+        softAssert.assertAll();
+    }
 
     // @Test(dataProvider = "userData")
     // public void addBackpackToCart(String username, String password, String expectedPrice) {
@@ -98,5 +107,5 @@ public class InventoryTest {
         );
         softAssert.assertAll();
     }
-
+    
 }
