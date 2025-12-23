@@ -57,6 +57,9 @@ public class InventoryTest {
         String price = inventoryPage.getBackpackPrice();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(price, "$29.99", "Backpack price does not match.");
+        inventoryPage.clickAddToCart();
+        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        softAssert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
         softAssert.assertAll();
     }
 
