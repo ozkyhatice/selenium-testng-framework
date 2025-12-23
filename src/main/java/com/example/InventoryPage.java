@@ -14,10 +14,12 @@ public class InventoryPage {
 
     // LOCATORS
     private By backPackItem = By.id("item_4_img_link");
+    private By bikeLightItem = By.id("item_0_title_link");
+    private By boltTShirtItem = By.id("item_1_title_link");
     private By priceItem = By.className("inventory_details_price");
     private By addToCartButton = By.id("add-to-cart");
     private By shoppingCartBadge = By.className("shopping_cart_badge");
-
+    
     private By inventoryContainer = By.id("inventory_container");
     // private By inventoryList = By.className("inventory_list");
     private By inventoryItem = By.className("inventory_item");
