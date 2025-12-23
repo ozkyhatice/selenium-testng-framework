@@ -2,7 +2,6 @@ package com.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -14,8 +13,6 @@ public class InventoryPage {
 
     // LOCATORS
     private By backPackItem = By.id("item_4_img_link");
-    private By bikeLightItem = By.id("item_0_title_link");
-    private By boltTShirtItem = By.id("item_1_title_link");
     private By priceItem = By.className("inventory_details_price");
     private By addToCartButton = By.id("add-to-cart");
     private By shoppingCartBadge = By.className("shopping_cart_badge");
@@ -28,7 +25,23 @@ public class InventoryPage {
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
     }
+    public String getItemPriceMainPage(By itemLocator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement item = wait.until(ExpectedConditions.presenceOfElementLocated(itemLocator));
+        WebElement container = item.findElement(By.xpath("./ancestor::div[@class='inventory_item']"));
+        return container.findElement(By.className("inventory_item_price")).getText();
+    }
+    
+    public String getItemPriceDetailPage(By itemLocator) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(itemLocator)).click();
+        String price = wait.until(ExpectedConditions.visibilityOfElementLocated(priceItem)).getText();
+        driver.navigate().back();
+        wait.until(ExpectedConditions.presenceOfElementLocated(inventoryContainer));
+        return price;
+    }
 
+    
     public boolean isInventoryPageDisplayed() {
         return driver.findElement(inventoryContainer).isDisplayed();
     }
@@ -40,35 +53,19 @@ public class InventoryPage {
     }
 
     public void clickBackpack() {
-        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         wait.until(ExpectedConditions.elementToBeClickable(backPackItem)).click();
     }
 
     public String getBackpackPrice() {
-        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(priceItem)).getText();
     }
 
+    
     public void clickAddToCart() {
-        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
-        
-        // JavaScript executor as fallback for CI environments
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        try {
-            button.click();
-            // Wait for JavaScript to complete
-            wait.until(driver -> js.executeScript("return document.readyState").equals("complete"));
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", button);
-        }
-        
-        // Give time for badge to appear
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
     }
 
     public String getCartBadgeCount(WebDriverWait wait) {

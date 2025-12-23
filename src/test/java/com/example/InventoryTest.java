@@ -3,9 +3,11 @@ package com.example;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -110,5 +112,94 @@ public class InventoryTest {
         );
         softAssert.assertAll();
     }
-    
+    @DataProvider(name = "userData2")
+    public Object[][] userData2() {
+        return new Object[][] {
+            {"standard_user", "secret_sauce"},
+        };
+    }
+    @Test(retryAnalyzer = Retry.class, dataProvider = "userData2")
+    public void checkItemPricesConsistency(String username, String password) {
+        loginPage.login(username, password);
+        By item1 = By.id("item_4_img_link"); // Backpack
+        By item2 = By.id("item_0_title_link"); // Bike Light
+        By item3 = By.id("item_1_title_link"); // Bolt T-Shirt
+
+        // price controls
+        String price1Main = inventoryPage.getItemPriceMainPage(item1);
+        String price1Detail = inventoryPage.getItemPriceDetailPage(item1);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(
+            price1Main, 
+            price1Detail, 
+            "Price mismatch for Backpack between main and detail page."
+        );
+        String price2Main = inventoryPage.getItemPriceMainPage(item2);
+        String price2Detail = inventoryPage.getItemPriceDetailPage(item2);
+        softAssert.assertEquals(
+            price2Main, 
+            price2Detail, 
+            "Price mismatch for Bike Light between main and detail page."
+        );
+        String price3Main = inventoryPage.getItemPriceMainPage(item3);
+        String price3Detail = inventoryPage.getItemPriceDetailPage(item3);
+        softAssert.assertEquals(
+            price3Main, 
+            price3Detail, 
+            "Price mismatch for Bolt T-Shirt between main and detail page."
+        );
+        softAssert.assertAll();
+    }
+    @DataProvider(name = "itemsAndUsers")
+    public Object[][] itemsAndUsers() {
+        return new Object[][] {
+            {"item_4_title_link", "standard_user", "secret_sauce"},
+            {"item_0_title_link", "standard_user", "secret_sauce"},
+            {"item_1_title_link", "standard_user", "secret_sauce"}
+        };
+    }
+
+    @DataProvider(name = "singleUser")
+    public Object[][] singleUser() {
+        return new Object[][] {
+            {"standard_user", "secret_sauce"}
+        };
+    }
+
+    @Test(retryAnalyzer = Retry.class, dataProvider = "itemsAndUsers")
+    public void addCartItems(String itemId, String username, String password) {
+        loginPage.login(username, password);
+        driver.findElement(By.id(itemId)).click();
+        inventoryPage.clickAddToCart();
+        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
+        softAssert.assertAll();
+    }
+
+    // add all item from data provider to cart and verify badge count
+    @Test(retryAnalyzer = Retry.class, dataProvider = "singleUser")
+    public void addMultipleItemsToCart(String username, String password) {
+        loginPage.login(username, password);
+        int itemCount = 0;
+        String[] itemsToAdd = {"item_4_title_link", "item_0_title_link", "item_1_title_link"};
+        SoftAssert softAssert = new SoftAssert();
+
+        for (String itemId : itemsToAdd) {
+            wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+            
+            wait.until(ExpectedConditions.elementToBeClickable(By.id(itemId))).click();
+            
+
+            inventoryPage.clickAddToCart();
+            driver.navigate().back();
+            
+            wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+
+            itemCount++;
+            String badgeCount = inventoryPage.getCartBadgeCount(wait);
+            softAssert.assertEquals(badgeCount, String.valueOf(itemCount), "Cart badge count should be " + itemCount + " after adding an item.");
+        }
+        softAssert.assertAll();
+    }
 }
