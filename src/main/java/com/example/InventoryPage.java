@@ -41,13 +41,25 @@ public class InventoryPage {
 
     
     public boolean isInventoryPageDisplayed() {
-        return driver.findElement(inventoryContainer).isDisplayed();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(inventoryContainer));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     public int getInventoryItemCount() {
         return driver.findElements(inventoryItem).size();
     }
     public boolean isCartIconDisplayed() {
-        return driver.findElement(shoppingCart).isDisplayed();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCart));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void clickBackpack() {
