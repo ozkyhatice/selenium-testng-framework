@@ -1,48 +1,21 @@
 package com.example;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import org.openqa.selenium.support.ui.WebDriverWait;
-// import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.asserts.SoftAssert;
 
-import java.time.Duration;
 
-public class InventoryTest {
-    WebDriver driver;
-    WebDriverWait wait;
+public class InventoryTest extends BaseTest {
     LoginPagePom loginPage;
     InventoryPage inventoryPage;
-
     @BeforeMethod
-    public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new"); 
-        options.addArguments("--disable-gpu");     
-        options.addArguments("--window-size=1920,1080"); 
-        options.addArguments("--no-sandbox");      
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--proxy-server='direct://'");
-        options.addArguments("--proxy-bypass-list=*");
-        options.addArguments("--blink-settings=imagesEnabled=false"); // Hız için resimleri devre dışı bırakabilir
-
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30)); 
-        driver.get("https://www.saucedemo.com/");
+    public void pageSetup() {
         loginPage = new LoginPagePom(driver);
         inventoryPage = new InventoryPage(driver);
     }
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
-    }
+
+    
 
     @DataProvider(name = "userData")
     public Object[][] userData() {
