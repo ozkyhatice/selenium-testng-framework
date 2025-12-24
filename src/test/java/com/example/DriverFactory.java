@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.time.Duration;
 
 public class DriverFactory {
-    public static WebDriver createChromWebDriver() {
+    public static WebDriver createDriver() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new"); 
         options.addArguments("--disable-gpu");     

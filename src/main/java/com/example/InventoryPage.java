@@ -2,9 +2,7 @@ package com.example;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
@@ -68,35 +66,9 @@ public class InventoryPage {
         wait.until(ExpectedConditions.elementToBeClickable(addToCartButton)).click();
     }
 
-    public String getCartBadgeCount(WebDriverWait wait) {
-        System.out.println("DEBUG: Waiting for badge to appear after adding item to cart...");
-        
-        // Use FluentWait with longer timeout and ignore NoSuchElement exceptions
-        FluentWait<WebDriver> fluentWait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(45))
-                .pollingEvery(Duration.ofMillis(500))
-                .ignoring(NoSuchElementException.class)
-                .withMessage("Shopping cart badge did not appear within 45 seconds");
-        
-        // Wait for badge to appear and become visible
-        WebElement badge = fluentWait.until(driver -> {
-            try {
-                WebElement element = driver.findElement(shoppingCartBadge);
-                if (element.isDisplayed()) {
-                    String text = element.getText();
-                    System.out.println("DEBUG: Badge found with text: '" + text + "'");
-                    if (text != null && !text.trim().isEmpty()) {
-                        return element;
-                    }
-                }
-            } catch (Exception e) {
-                System.out.println("DEBUG: Badge not yet available, retrying...");
-            }
-            return null;
-        });
-        
-        String badgeText = badge.getText().trim();
-        System.out.println("DEBUG: Final badge text: '" + badgeText + "'");
-        return badgeText;
+    public String getCartBadgeCount() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(shoppingCartBadge));
+        return badge.getText();
     }
 }

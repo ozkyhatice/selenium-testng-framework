@@ -11,8 +11,8 @@ public class InventoryTest extends BaseTest {
     InventoryPage inventoryPage;
     @BeforeMethod
     public void pageSetup() {
-        loginPage = new LoginPagePom(driver);
-        inventoryPage = new InventoryPage(driver);
+        loginPage = new LoginPagePom(getDriver());
+        inventoryPage = new InventoryPage(getDriver());
     }
 
     
@@ -33,7 +33,7 @@ public class InventoryTest extends BaseTest {
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(price, "$29.99", "Backpack price does not match.");
         inventoryPage.clickAddToCart();
-        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        String badgeCount = inventoryPage.getCartBadgeCount();
         softAssert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
         softAssert.assertAll();
     }
@@ -142,9 +142,9 @@ public class InventoryTest extends BaseTest {
     @Test(retryAnalyzer = Retry.class, dataProvider = "itemsAndUsers")
     public void addCartItems(String itemId, String username, String password) {
         loginPage.login(username, password);
-        driver.findElement(By.id(itemId)).click();
+        getDriver().findElement(By.id(itemId)).click();
         inventoryPage.clickAddToCart();
-        String badgeCount = inventoryPage.getCartBadgeCount(wait);
+        String badgeCount = inventoryPage.getCartBadgeCount();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertEquals(badgeCount, "1", "Cart badge count should be 1 after adding an item.");
         softAssert.assertAll();
@@ -159,7 +159,7 @@ public class InventoryTest extends BaseTest {
     //     SoftAssert softAssert = new SoftAssert();
 
     //     for (String itemId : itemsToAdd) {
-    //         wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+    //         wait.until(getDriver() -> inventoryPage.isInventoryPageDisplayed());
             
     //         wait.until(ExpectedConditions.elementToBeClickable(By.id(itemId))).click();
             
@@ -172,8 +172,8 @@ public class InventoryTest extends BaseTest {
     //             Thread.currentThread().interrupt();
     //         }
             
-    //         driver.navigate().back();
-    //         wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+    //         getDriver().navigate().back();
+    //         wait.until(getDriver() -> inventoryPage.isInventoryPageDisplayed());
 
     //         itemCount++;
     //         String badgeCount = inventoryPage.getCartBadgeCount(wait);
