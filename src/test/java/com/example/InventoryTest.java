@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+// import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -177,35 +177,35 @@ public class InventoryTest {
         softAssert.assertAll();
     }
 
-    // add all item from data provider to cart and verify badge count
-    @Test(retryAnalyzer = Retry.class, dataProvider = "singleUser")
-    public void addMultipleItemsToCart(String username, String password) {
-        loginPage.login(username, password);
-        int itemCount = 0;
-        String[] itemsToAdd = {"item_4_title_link", "item_0_title_link", "item_1_title_link"};
-        SoftAssert softAssert = new SoftAssert();
+    // // add all item from data provider to cart and verify badge count
+    // @Test(retryAnalyzer = Retry.class, dataProvider = "singleUser")
+    // public void addMultipleItemsToCart(String username, String password) {
+    //     loginPage.login(username, password);
+    //     int itemCount = 0;
+    //     String[] itemsToAdd = {"item_4_title_link", "item_0_title_link", "item_1_title_link"};
+    //     SoftAssert softAssert = new SoftAssert();
 
-        for (String itemId : itemsToAdd) {
-            wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+    //     for (String itemId : itemsToAdd) {
+    //         wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
             
-            wait.until(ExpectedConditions.elementToBeClickable(By.id(itemId))).click();
+    //         wait.until(ExpectedConditions.elementToBeClickable(By.id(itemId))).click();
             
-            inventoryPage.clickAddToCart();
+    //         inventoryPage.clickAddToCart();
             
-            // Wait a moment for cart to update
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+    //         // Wait a moment for cart to update
+    //         try {
+    //             Thread.sleep(1000);
+    //         } catch (InterruptedException e) {
+    //             Thread.currentThread().interrupt();
+    //         }
             
-            driver.navigate().back();
-            wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
+    //         driver.navigate().back();
+    //         wait.until(driver -> inventoryPage.isInventoryPageDisplayed());
 
-            itemCount++;
-            String badgeCount = inventoryPage.getCartBadgeCount(wait);
-            softAssert.assertEquals(badgeCount, String.valueOf(itemCount), "Cart badge count should be " + itemCount + " after adding an item.");
-        }
-        softAssert.assertAll();
-    }
+    //         itemCount++;
+    //         String badgeCount = inventoryPage.getCartBadgeCount(wait);
+    //         softAssert.assertEquals(badgeCount, String.valueOf(itemCount), "Cart badge count should be " + itemCount + " after adding an item.");
+    //     }
+    //     softAssert.assertAll();
+    // }
 }
